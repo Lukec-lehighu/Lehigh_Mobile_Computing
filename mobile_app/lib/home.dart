@@ -433,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // hint: use hasProfanity() plugin, then change true to profanity check
             // your codes begin here
             if (true){
-  
+            
             // end
             //SUICIDAL MESSAGES FILTER HERE
             }
@@ -453,7 +453,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     postTime.add(Duration(hours: delayInHours));
                 // use FirebaseFirestore.instance to store the comment entry (data, user, feelvalue, posttime, visibletime)
                 // your codes begin here
+                final city = <String, String>{
+                  "name": "Los Angeles",
+                  "state": "CA",
+                  "country": "USA"
+                };
 
+                FirebaseFirestore.instance
+                    .collection("comments")
+                    .doc("LA")
+                    .set(city)
+                    .onError((e, _) => print("Error writing document: $e"));
 
                 // end
                 setState(() {
