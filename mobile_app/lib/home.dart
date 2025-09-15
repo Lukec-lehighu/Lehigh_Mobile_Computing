@@ -428,21 +428,34 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton.styleFrom(backgroundColor: Colors.indigo.shade300),
           onPressed: () {
             final filter = ProfanityFilter();
+            
             // implement - Check for profanity - 
             //returns a msg "Please refrain from using profanity"(if profanity is present)
             // hint: use hasProfanity() plugin, then change true to profanity check
             // your codes begin here
-            if (true){
-            
+            if (filter.hasProfanity(cmntController.text)){
+               Fluttertoast.showToast(
+                msg: "Please refrain from using profanity",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER, // Also possible "TOP" and "BOTTOM"
+              );
             // end
             //SUICIDAL MESSAGES FILTER HERE
             }
             else {
               // add code to set feelValue to g b n, 'Positive'='g', 'Negative'='b', 'Neutral'='n'
               if (selectedTone != null) {
-                String feelValue;
+                String feelValue = "ERROR";
                 // your codes begin here
-
+                if(selectedTone == "Positive") {
+                  feelValue = "g";
+                }
+                else if(selectedTone == "Negative") {
+                  feelValue = "b";
+                }
+                else if(selectedTone == "Neutral") {
+                  feelValue = "n";
+                }
 
                 // end
                 // Generating a random delay between 8 and 24 hours
@@ -453,17 +466,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     postTime.add(Duration(hours: delayInHours));
                 // use FirebaseFirestore.instance to store the comment entry (data, user, feelvalue, posttime, visibletime)
                 // your codes begin here
-                final city = <String, String>{
-                  "name": "Los Angeles",
-                  "state": "CA",
-                  "country": "USA"
+                final comment_data = <String, String>{
+                  "data": cmntController.text,
+                  "user": user?.displayName?.toString() ?? "NO NAME",
+                  "feelvalue": selectedTone.toString(),
+                  "posttime": postTime.toString(),
+                  "visibletime": visibleTime.toString()
                 };
 
                 FirebaseFirestore.instance
                     .collection("comments")
-                    .doc("LA")
-                    .set(city)
-                    .onError((e, _) => print("Error writing document: $e"));
+                    .doc(locValue)
+                    .set(comment_data)
+                    .onError((e, _) => print("Error posting comment: $e"));
 
                 // end
                 setState(() {
@@ -473,6 +488,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).pop();
               } else {
                 // Handle case when no tone is selected (Maybe show a snackbar or alert)
+                Fluttertoast.showToast(
+                msg: "Please select a comment tone",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER, // Also possible "TOP" and "BOTTOM"
+              );
               }
             }
           },
