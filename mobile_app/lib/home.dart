@@ -469,7 +469,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 final comment_data = <String, String>{
                   "data": cmntController.text,
                   "user": user?.displayName?.toString() ?? "NO NAME",
-                  "feelvalue": selectedTone.toString(),
+                  "feelvalue": feelValue,
                   "posttime": postTime.toString(),
                   "visibletime": visibleTime.toString()
                 };
