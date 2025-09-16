@@ -466,19 +466,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     postTime.add(Duration(hours: delayInHours));
                 // use FirebaseFirestore.instance to store the comment entry (data, user, feelvalue, posttime, visibletime)
                 // your codes begin here
-                final comment_data = <String, String>{
+                final comment_data = <String, dynamic>{
                   "data": cmntController.text,
-                  "user": user?.displayName?.toString() ?? "NO NAME",
-                  "feelvalue": feelValue,
-                  "posttime": postTime.toString(),
-                  "visibletime": visibleTime.toString()
+                  "user": user?.email,
+                  "feel": feelValue,
+                  "postTime": Timestamp.fromDate(postTime),
+                  "visibleTime": Timestamp.fromDate(visibleTime)
                 };
 
                 FirebaseFirestore.instance
                     .collection("comments")
                     .doc(locValue)
-                    .set(comment_data)
-                    .onError((e, _) => print("Error posting comment: $e"));
+                    .collection("comments")
+                    .add(comment_data);
 
                 // end
                 setState(() {
