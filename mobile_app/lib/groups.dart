@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
-}
+} 
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController cmntController = TextEditingController();
@@ -91,9 +92,19 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
           // add the newly created group to the group list dropdown option (public private) auth!.email
           // your codes begin here
+          _groupList.add([
+            cmntController.text,
+            _pubpriv ? "Private" : "Public",
+            FirebaseAuth.instance.currentUser!.email!,
+            descController.text
+          ]);
+          _groupEntry.add(true);
 
+          cmntController.clear();
+          descController.clear();
+          Navigator.of(context).pop();
 
-
+          setState(() {}); //reload to show changes
           // end
           },
           style:
@@ -130,8 +141,13 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             // show corresponding group description after click
             // your codes begin here
+            _groupEntry[index] = true;
 
+            cmntController.clear();
+            descController.clear();
+            Navigator.of(context).pop();
 
+            setState(() {}); //reload to show changes
             // end
           },
           style:
@@ -141,7 +157,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
           onPressed: () {
             // your codes begin here
-
+            cmntController.clear();
+            descController.clear();
+            Navigator.of(context).pop();
 
             // end
           },

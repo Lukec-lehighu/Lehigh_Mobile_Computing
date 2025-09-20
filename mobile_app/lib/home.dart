@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Map<String, dynamic> dataMap = data as Map<String, dynamic>;
             DateTime? visibleTime =
                 (dataMap['visibleTime'] as Timestamp?)?.toDate();
-            if (visibleTime != null && now.isAfter(visibleTime)) {
+            if (visibleTime != null && (true || now.isAfter(visibleTime))) {
               if (dataMap['feel'] == 'g') {
                 return dataMap;
               }
