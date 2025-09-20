@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_app/home.dart';
 import 'package:mobile_app/main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Groups extends StatelessWidget {
   const Groups({super.key});
@@ -85,6 +86,19 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           SizedBox(height: 5),
+          DropdownButton<String>(
+            value: (_pubpriv ? "Private" : "Public"),
+            items: <String>["Public", "Private"].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? value) {
+              _pubpriv = value == "Private";
+              setState(() {_pubpriv;});
+            },
+          )
         ],
       ),
       actions: <Widget>[
@@ -92,19 +106,28 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
           // add the newly created group to the group list dropdown option (public private) auth!.email
           // your codes begin here
-          _groupList.add([
-            cmntController.text,
-            _pubpriv ? "Private" : "Public",
-            FirebaseAuth.instance.currentUser!.email!,
-            descController.text
-          ]);
-          _groupEntry.add(true);
+          if(cmntController.text.isNotEmpty && descController.text.isNotEmpty) {
+            _groupList.add([
+              cmntController.text,
+              _pubpriv ? "Private" : "Public",
+              FirebaseAuth.instance.currentUser!.email!,
+              descController.text
+            ]);
+            _groupEntry.add(true);
 
-          cmntController.clear();
-          descController.clear();
-          Navigator.of(context).pop();
+            cmntController.clear();
+            descController.clear();
+            Navigator.of(context).pop();
 
-          setState(() {}); //reload to show changes
+            setState(() {}); //reload to show changes
+          }
+          else {
+            Fluttertoast.showToast(
+              msg: "Please add name and description",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER, // Also possible "TOP" and "BOTTOM"
+            );
+          }
           // end
           },
           style:
